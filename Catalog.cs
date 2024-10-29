@@ -23,5 +23,42 @@ namespace Catalog{
                 Console.WriteLine($"{subFiles[i].LastWriteTime}        {subFiles[i].CreationTime}        {subFiles[i].Name}");
             }
         }
+        public void MoveCatalogs(string pathMoveTo, ref string currentPath){
+            Console.WriteLine(pathMoveTo);
+            DirectoryInfo directoryInfo = new DirectoryInfo(pathMoveTo);
+            if(directoryInfo.Exists){
+                directory = directoryInfo.FullName;
+                currentPath = directoryInfo.FullName;
+            }
+            else{
+                Console.WriteLine("Invalid Path!");
+            }
+
+        }
+        public void MoveSubCatalogs(string catalogName, ref string currentPath){
+            string catalogPath =  @$"{currentPath}\{catalogName}";
+            Console.WriteLine(catalogPath);
+            DirectoryInfo directoryInfo = new DirectoryInfo(catalogPath);
+            if(directoryInfo.Exists){
+                Console.WriteLine(directoryInfo.FullName);
+                directory = directoryInfo.FullName;
+                currentPath = directoryInfo.FullName;
+            }
+            else{
+                Console.WriteLine("Invalid Path!");
+            }
+
+        }
+        public void MoveParentCatalog(ref string currentPath){
+            DirectoryInfo directoryInfo = new DirectoryInfo(currentPath);
+            if(directoryInfo.Exists){
+                directory = directoryInfo.Parent.FullName;
+                currentPath = directoryInfo.Parent.FullName;
+            }
+            else{
+                Console.WriteLine("Invalid Path!");
+            }
+
+        }
     }
 }

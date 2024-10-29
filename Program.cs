@@ -2,8 +2,10 @@
 class FileManager{
     static int Main(String[] args){
         bool programWork = true;
+        Console.InputEncoding = System.Text.Encoding.Unicode;
+        Command com = new Command();
         while (programWork){
-            Command com = new Command(ref programWork);
+            com.RunCommand(ref programWork);
         }
         return 0;
     }
