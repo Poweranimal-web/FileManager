@@ -28,6 +28,10 @@ namespace Commands{
                     string[] commandArray3 = prompt.Split(" ");
                     dir.CreateSubCatalog(commandArray3[1], ref currentPath);
                     break;
+                case string prompt when new Regex(@"rmdir [^:\\]*").IsMatch(command):
+                    string[] commandArray4 = prompt.Split(" ");
+                    dir.DeleteSubCatalog(commandArray4[1], ref currentPath);
+                    break;
                 case "cd ..":
                     dir.MoveParentCatalog(ref currentPath);
                     break;

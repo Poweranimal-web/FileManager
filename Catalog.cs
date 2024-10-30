@@ -71,9 +71,26 @@ namespace Catalog{
                 Console.WriteLine(e);
 
             }
-            
-            
+        }
+        public void DeleteSubCatalog(string catalogName, ref string currentPath){
+            string catalogPath =  @$"{currentPath}\{catalogName}";
+            DirectoryInfo directoryInfo = new DirectoryInfo(catalogPath);
+            try{
+                Console.Write("Are you sure to want delete all files in catalog,if they exist(yes/no):");
+                string deleteAllFilesInCatalog = Console.ReadLine();
+                if (deleteAllFilesInCatalog == "yes"){
+                    directoryInfo.Delete();
+                    Console.WriteLine($"Deleted {catalogName} successfully");
+                }
+                else{
+                    Console.WriteLine("Cancel deletion");
+                }
+            }
+            catch (Exception e){
+                Console.WriteLine("Invalid name, pls choose another one!");
+                Console.WriteLine(e);
 
+            }
         }
     }
 }
