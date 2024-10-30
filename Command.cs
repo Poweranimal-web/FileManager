@@ -1,7 +1,6 @@
 using Disk;
 using Catalog;
 using System.Text.RegularExpressions;
-using System.Security.Cryptography.X509Certificates;
 namespace Commands{
     class Command{
         string? command;
@@ -24,6 +23,10 @@ namespace Commands{
                 case string prompt when new Regex(@"cd [^:\\]*").IsMatch(command):
                     string[] commandArray2 = prompt.Split(" ");
                     dir.MoveSubCatalogs(commandArray2[1], ref currentPath);
+                    break;
+                case string prompt when new Regex(@"mkdir [^:\\]*").IsMatch(command):
+                    string[] commandArray3 = prompt.Split(" ");
+                    dir.CreateSubCatalog(commandArray3[1], ref currentPath);
                     break;
                 case "cd ..":
                     dir.MoveParentCatalog(ref currentPath);

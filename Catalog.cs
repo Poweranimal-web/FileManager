@@ -60,5 +60,20 @@ namespace Catalog{
             }
 
         }
+        public void CreateSubCatalog(string catalogName, ref string currentPath){
+            DirectoryInfo directoryInfo = new DirectoryInfo(currentPath);
+            try{
+                directoryInfo.CreateSubdirectory(catalogName);
+                Console.WriteLine($"Created {catalogName} successfully");
+            }
+            catch (Exception e){
+                Console.WriteLine("Invalid name, pls choose another one!");
+                Console.WriteLine(e);
+
+            }
+            
+            
+
+        }
     }
 }
