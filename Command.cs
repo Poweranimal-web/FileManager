@@ -6,6 +6,7 @@ namespace Commands{
         string? command;
         static string currentPath = ""; 
         DirectoryControl dir = new DirectoryControl(ref currentPath);
+        string[] commandArray;
         public void RunCommand(ref bool status){
             Console.Write($"{currentPath}>> ");
             command = Console.ReadLine();
@@ -17,20 +18,25 @@ namespace Commands{
                     dir.GetSubContentCurrentPath();
                     break;
                 case string prompt when new Regex(@"cd\s\S*\\").IsMatch(command):
-                    string[] commandArray = prompt.Split(" ");
+                    commandArray = prompt.Split(" ");
                     dir.MoveCatalogs(commandArray[1], ref currentPath);
                     break;
                 case string prompt when new Regex(@"cd [^:\\]*").IsMatch(command):
-                    string[] commandArray2 = prompt.Split(" ");
-                    dir.MoveSubCatalogs(commandArray2[1], ref currentPath);
+                    commandArray = prompt.Split(" ");
+                    Console.WriteLine("fdkfdf");
+                    dir.MoveSubCatalogs(commandArray[1], ref currentPath);
                     break;
                 case string prompt when new Regex(@"mkdir [^:\\]*").IsMatch(command):
-                    string[] commandArray3 = prompt.Split(" ");
-                    dir.CreateSubCatalog(commandArray3[1], ref currentPath);
+                    commandArray = prompt.Split(" ");
+                    dir.CreateSubCatalog(commandArray[1], ref currentPath);
                     break;
                 case string prompt when new Regex(@"rmdir [^:\\]*").IsMatch(command):
-                    string[] commandArray4 = prompt.Split(" ");
-                    dir.DeleteSubCatalog(commandArray4[1], ref currentPath);
+                    commandArray = prompt.Split(" ");
+                    dir.DeleteSubCatalog(commandArray[1], ref currentPath);
+                    break;
+                case string prompt when new Regex(@"mv \S* -d \S*").IsMatch(command):
+                    commandArray = prompt.Split(" ");
+                    dir.MoveCatalog(commandArray[1], commandArray[3]);
                     break;
                 case "cd ..":
                     dir.MoveParentCatalog(ref currentPath);

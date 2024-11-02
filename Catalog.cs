@@ -87,7 +87,30 @@ namespace Catalog{
                 }
             }
             catch (Exception e){
-                Console.WriteLine("Invalid name, pls choose another one!");
+                Console.WriteLine(e);
+
+            }
+        }
+        public void MoveCatalog(string catalogTargetPath,  string catalogDestinationPath){
+            Console.WriteLine(catalogDestinationPath);
+            DirectoryInfo directoryInfo = new DirectoryInfo(catalogTargetPath);
+            try{
+                Console.Write("Are you sure to want moving all files in catalog,if it doesn't exist(yes/no):");
+                string deleteAllFilesInCatalog = Console.ReadLine();
+                if (deleteAllFilesInCatalog == "yes"){
+                    if(directoryInfo.Exists && !Directory.Exists(catalogDestinationPath)){
+                        directoryInfo.MoveTo(catalogDestinationPath);
+                        Console.WriteLine($"Moveing catalogs successfully");
+                    }
+                    else{
+                        Console.WriteLine("Destination exist or target path doesn't exist");
+                    }
+                }
+                else{
+                    Console.WriteLine("Cancel moving");
+                }
+            }
+            catch (Exception e){
                 Console.WriteLine(e);
 
             }
