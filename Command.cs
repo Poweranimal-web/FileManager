@@ -1,11 +1,13 @@
 using Disk;
 using Catalog;
+using FileIO;
 using System.Text.RegularExpressions;
 namespace Commands{
     class Command{
         string? command;
         static string currentPath = ""; 
         DirectoryControl dir = new DirectoryControl(ref currentPath);
+        FileControl file = new FileControl();
         string[] commandArray;
         public void RunCommand(ref bool status){
             Console.Write($"{currentPath}>> ");
@@ -37,6 +39,10 @@ namespace Commands{
                 case string prompt when new Regex(@"mv \S* -d \S*").IsMatch(command):
                     commandArray = prompt.Split(" ");
                     dir.MoveCatalog(commandArray[1], commandArray[3]);
+                    break;
+                case string prompt when new Regex(@"crfile [^:\\]*").IsMatch(command):
+                    commandArray = prompt.Split(" ");
+                    file.CreateFile(commandArray[1]);
                     break;
                 case "cd ..":
                     dir.MoveParentCatalog(ref currentPath);
