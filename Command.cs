@@ -42,11 +42,19 @@ namespace Commands{
                     break;
                 case string prompt when new Regex(@"crfile [^:\\]*").IsMatch(command):
                     commandArray = prompt.Split(" ");
-                    file.CreateFile(commandArray[1]);
+                    file.CreateFile(commandArray[1],ref currentPath);
                     break;
                 case string prompt when new Regex(@"rmfile [^:\\]*").IsMatch(command):
                     commandArray = prompt.Split(" ");
-                    file.DeleteFile(commandArray[1]);
+                    file.DeleteFile(commandArray[1],ref currentPath);
+                    break;
+                case string prompt when new Regex(@"copy [^:\\]* -to \S*").IsMatch(command):
+                    commandArray = prompt.Split(" ");
+                    file.CopyFileTo(commandArray[1], commandArray[3], ref currentPath);
+                    break;
+                case string prompt when new Regex(@"mvfile [^:\\]* -to \S*").IsMatch(command):
+                    commandArray = prompt.Split(" ");
+                    file.MoveFileTo(commandArray[1], commandArray[3], ref currentPath);
                     break;
                 case "cd ..":
                     dir.MoveParentCatalog(ref currentPath);
