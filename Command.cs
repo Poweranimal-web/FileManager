@@ -44,6 +44,10 @@ namespace Commands{
                     commandArray = prompt.Split(" ");
                     file.CreateFile(commandArray[1]);
                     break;
+                case string prompt when new Regex(@"rmfile [^:\\]*").IsMatch(command):
+                    commandArray = prompt.Split(" ");
+                    file.DeleteFile(commandArray[1]);
+                    break;
                 case "cd ..":
                     dir.MoveParentCatalog(ref currentPath);
                     break;
