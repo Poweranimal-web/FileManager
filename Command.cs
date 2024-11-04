@@ -7,7 +7,7 @@ namespace Commands{
         string? command;
         static string currentPath = ""; 
         DirectoryControl dir = new DirectoryControl(ref currentPath);
-        FileControl file = new FileControl();
+        FileControl file = new FileControl(Console.OpenStandardInput());
         string[] commandArray;
         public void RunCommand(ref bool status){
             Console.Write($"{currentPath}>> ");
@@ -55,6 +55,11 @@ namespace Commands{
                 case string prompt when new Regex(@"mvfile [^:\\]* -to \S*").IsMatch(command):
                     commandArray = prompt.Split(" ");
                     file.MoveFileTo(commandArray[1], commandArray[3], ref currentPath);
+                    break;
+                case string prompt when new Regex(@"edit [^:\\]*").IsMatch(command):
+                    commandArray = prompt.Split(" ");
+                    file.WriteFileDataToBufferInput(currentPath+"\\"+commandArray[1]);
+                    file.ReadLine();
                     break;
                 case "cd ..":
                     dir.MoveParentCatalog(ref currentPath);

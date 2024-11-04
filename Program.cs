@@ -1,4 +1,6 @@
 ﻿using Commands;
+using System.Text;
+using FileIO;
 class FileManager{
     static int Main(String[] args){
         bool programWork = true;
