@@ -4,7 +4,7 @@ using System.Text;
 using System.Runtime.CompilerServices;
 using System.Net.Cache;
 namespace FileIO{
-    class FileControl : TextReader
+    class FileControl
 {
         String sb;
         StreamReader stream;
@@ -64,7 +64,8 @@ namespace FileIO{
             }
         }
         public void WriteFileDataToBufferInput(string path){
-            FileStream file = new FileStream(path,FileMode.Open);
+            FileStream file = new FileStream(path,FileMode.OpenOrCreate);
+            // int height_file = CountLengthColumnFile(file);
             try{
                 byte[] buffer = new byte[file.Length];
                 int length = file.Read(buffer);
@@ -72,18 +73,21 @@ namespace FileIO{
                     string data = Encoding.Default.GetString(buffer);
                     sb = new String(data);
                 }
+
             }
             catch(Exception e){
                 Console.WriteLine(e);
             }
-            finally {
+            finally{
                 file.Close();
             }
 
         }
-        public override string? ReadLine()
+        public string? ReadLine(string path)
         {
+            FileStream file = new FileStream(path,FileMode.Truncate);
             int pos = Console.CursorLeft;
+            int pos_vertical = Console.CursorTop;
             Console.Write(sb);
             ConsoleKeyInfo info;
             List<char> chars = new List<char> ();
@@ -101,7 +105,30 @@ namespace FileIO{
                     Console.CursorLeft -= 1;
 
                 }
-                else if (info.Key == ConsoleKey.Enter) { Console.Write(Environment.NewLine); break; }
+                if (info.Key == ConsoleKey.LeftArrow && Console.CursorLeft > pos)
+                {
+                    Console.CursorLeft -= 1;
+                }
+                if (info.Key == ConsoleKey.RightArrow && Console.CursorLeft > pos)
+                {
+                    Console.CursorLeft += 1;
+                }
+                else if (info.Key == ConsoleKey.UpArrow)
+                {
+                    Console.CursorTop -= 1;
+                }
+                else if (info.Key == ConsoleKey.DownArrow)
+                {
+                    Console.CursorTop += 1;
+                }
+                else if (info.Modifiers.HasFlag(ConsoleModifiers.Control) && info.Key == ConsoleKey.S){
+                    byte[] data = Encoding.Default.GetBytes(chars.ToArray());
+                    file.Write(data);
+                    Console.WriteLine("\nSaved");
+                    file.Close();
+                    break;
+                }
+                else if (info.Key == ConsoleKey.Enter) { Console.Write(Environment.NewLine);  break; }
                 //Here you need create own checking of symbols
                 else if (char.IsLetterOrDigit(info.KeyChar))
                 {

@@ -59,7 +59,7 @@ namespace Commands{
                 case string prompt when new Regex(@"edit [^:\\]*").IsMatch(command):
                     commandArray = prompt.Split(" ");
                     file.WriteFileDataToBufferInput(currentPath+"\\"+commandArray[1]);
-                    file.ReadLine();
+                    file.ReadLine(currentPath+"\\"+commandArray[1]);
                     break;
                 case "cd ..":
                     dir.MoveParentCatalog(ref currentPath);
