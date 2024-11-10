@@ -30,24 +30,34 @@ namespace Catalog{
         }
         public List<object> findFileorDirectory(string path, string nameEntity){
             DirectoryInfo directoryInfo = new DirectoryInfo(path);
-            DirectoryInfo[] subCatalogs = directoryInfo.GetDirectories();
-            FileInfo[] subFiles = directoryInfo.GetFiles();
-            for (int i = 0; i < subFiles.Length; i++)
-            {
-                bool matched = nameEntity.Equals(subFiles[i].Name, StringComparison.OrdinalIgnoreCase);
-                if (matched){
-                    matchedObject.Add(subFiles[i]);
+            try{
+                FileInfo[] subFiles = directoryInfo.GetFiles();
+                DirectoryInfo[] subCatalogs = directoryInfo.GetDirectories();
+                for (int i = 0; i < subFiles.Length; i++)
+                {
+                    bool matched = nameEntity.Equals(subFiles[i].Name, StringComparison.OrdinalIgnoreCase);
+                    if (matched){
+                        matchedObject.Add(subFiles[i]);
+                    }
                 }
-            }
-            for (int i = 0; i < subCatalogs.Length; i++)
-            {
-                bool matched = nameEntity.Equals(subCatalogs[i].Name, StringComparison.OrdinalIgnoreCase);
-                if (matched){
-                    matchedObject.Add(subCatalogs[i]);
-                }
-                findFileorDirectory(subCatalogs[i].FullName, nameEntity);
+                for (int i = 0; i < subCatalogs.Length; i++)
+                {
+                    bool matched = nameEntity.Equals(subCatalogs[i].Name, StringComparison.OrdinalIgnoreCase);
+                    if (matched){
+                        matchedObject.Add(subCatalogs[i]);
+                    }
+                    findFileorDirectory(subCatalogs[i].FullName, nameEntity);
 
+                }
             }
+            catch (UnauthorizedAccessException e){
+                Console.WriteLine(e.Message);
+            }
+            catch(DirectoryNotFoundException e){
+                Console.WriteLine(e.Message);
+            }
+
+
             return matchedObject;
             
         }
