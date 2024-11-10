@@ -25,7 +25,6 @@ namespace Commands{
                     break;
                 case string prompt when new Regex(@"cd [^:\\]*").IsMatch(command):
                     commandArray = prompt.Split(" ");
-                    Console.WriteLine("fdkfdf");
                     dir.MoveSubCatalogs(commandArray[1], ref currentPath);
                     break;
                 case string prompt when new Regex(@"mkdir [^:\\]*").IsMatch(command):
@@ -60,6 +59,22 @@ namespace Commands{
                     commandArray = prompt.Split(" ");
                     file.WriteFileDataToBufferInput(currentPath+"\\"+commandArray[1]);
                     file.ReadLine(currentPath+"\\"+commandArray[1]);
+                    break;
+                case string prompt when new Regex(@"find [^:\\]*").IsMatch(command):
+                    commandArray = prompt.Split(" ");
+                    List<object> results = dir.findFileorDirectory(currentPath, commandArray[1]);
+                    if (results.Count > 0){
+                        Console.WriteLine("Results:");
+                        for (int i = 0; i < results.Count; i++)
+                        {
+                            FileSystemInfo result = (FileSystemInfo)results[i];
+                            Console.WriteLine($"{result.FullName}"); 
+                        }
+                    }
+                    else{
+                        Console.WriteLine("Not found");
+                    }
+                    dir.ClearCacheSearching();
                     break;
                 case "cd ..":
                     dir.MoveParentCatalog(ref currentPath);

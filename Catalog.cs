@@ -2,6 +2,7 @@ using System.IO;
 namespace Catalog{
     class DirectoryControl{
         string? directory;
+        List<object> matchedObject = new List<object>();
         public DirectoryControl(ref string currentPath){
             currentPath = Directory.GetCurrentDirectory();
             directory = currentPath;
@@ -23,6 +24,33 @@ namespace Catalog{
                 Console.WriteLine($"{subFiles[i].LastWriteTime}        {subFiles[i].CreationTime}        {subFiles[i].Name}");
             }
         }
+        public void ClearCacheSearching(){
+            matchedObject.Clear();
+            return;
+        }
+        public List<object> findFileorDirectory(string path, string nameEntity){
+            DirectoryInfo directoryInfo = new DirectoryInfo(path);
+            DirectoryInfo[] subCatalogs = directoryInfo.GetDirectories();
+            FileInfo[] subFiles = directoryInfo.GetFiles();
+            for (int i = 0; i < subFiles.Length; i++)
+            {
+                bool matched = nameEntity.Equals(subFiles[i].Name, StringComparison.OrdinalIgnoreCase);
+                if (matched){
+                    matchedObject.Add(subFiles[i]);
+                }
+            }
+            for (int i = 0; i < subCatalogs.Length; i++)
+            {
+                bool matched = nameEntity.Equals(subCatalogs[i].Name, StringComparison.OrdinalIgnoreCase);
+                if (matched){
+                    matchedObject.Add(subCatalogs[i]);
+                }
+                findFileorDirectory(subCatalogs[i].FullName, nameEntity);
+
+            }
+            return matchedObject;
+            
+        }
         public void MoveCatalogs(string pathMoveTo, ref string currentPath){
             Console.WriteLine(pathMoveTo);
             DirectoryInfo directoryInfo = new DirectoryInfo(pathMoveTo);
@@ -37,10 +65,8 @@ namespace Catalog{
         }
         public void MoveSubCatalogs(string catalogName, ref string currentPath){
             string catalogPath =  @$"{currentPath}\{catalogName}";
-            Console.WriteLine(catalogPath);
             DirectoryInfo directoryInfo = new DirectoryInfo(catalogPath);
             if(directoryInfo.Exists){
-                Console.WriteLine(directoryInfo.FullName);
                 directory = directoryInfo.FullName;
                 currentPath = directoryInfo.FullName;
             }

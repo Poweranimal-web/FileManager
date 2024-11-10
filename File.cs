@@ -83,7 +83,7 @@ namespace FileIO{
             }
 
         }
-        public string? ReadLine(string path)
+        public string? ReadLine(string path) // Not stable with large size of file!!!
         {
             FileStream file = new FileStream(path,FileMode.Truncate);
             int pos = Console.CursorLeft;
@@ -129,7 +129,6 @@ namespace FileIO{
                     break;
                 }
                 else if (info.Key == ConsoleKey.Enter) { Console.Write(Environment.NewLine);  break; }
-                //Here you need create own checking of symbols
                 else if (char.IsLetterOrDigit(info.KeyChar))
                 {
                     Console.Write(info.KeyChar);
